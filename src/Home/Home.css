@@ -1,0 +1,18 @@
+.box {
+    width: 300px;
+    height: 300px;
+    word-break: break-all;
+    /* overflow-y: auto; 
+    overflow-x: hidden; */
+}
+
+.more {
+    right: 12px;
+    top: 12px;
+}
+
+.subMenu {
+    top: 27px;
+    right: -50px;
+    z-index: 9999;
+}
