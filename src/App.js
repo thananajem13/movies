@@ -8,6 +8,7 @@ import SignIn from './SignIn/SignIn';
 import ContextContent from './ContextContent/ContextContent';
 import Home from './Home/Home';
 import ProtectedRoute from './ProtectedRoute/ProtectedRoute';
+import AlreadySingned from './AlreadySingned/AlreadySingned';
 
 
 function App() {
@@ -19,10 +20,11 @@ function App() {
         <Navbar />
         <Routes>
           <Route path='signup' element={
-            <SignUp /> }></Route>
-          <Route path='signin' element={<SignIn /> }></Route>
-          <Route path='/' element={<Home /> }></Route>
-          <Route path='/profile' element={<Home /> }></Route>
+            <AlreadySingned><SignUp /></AlreadySingned>
+             }></Route>
+          <Route path='signin' element={<AlreadySingned><SignIn /></AlreadySingned> }></Route>
+          <Route path='/' element={<ProtectedRoute><Home /></ProtectedRoute> }></Route>
+          <Route path='/profile' element={<ProtectedRoute><Home /></ProtectedRoute> }></Route>
         </Routes> 
         </ContextContent>
 

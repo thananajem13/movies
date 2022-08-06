@@ -57,12 +57,13 @@ export default function SignIn() {
             if (data.token.length !== 0) {
                 console.log(token)
                 setUserId(jwtDecode(data.token)._id)
+                console.log(jwtDecode(data.token)._id)
                 localStorage.setItem("userID", jwtDecode(data.token)._id)
 
                 console.log(userId)
             }
 
-            localStorage.setItem("userID", userId)
+            // localStorage.setItem("userID", userId)
             redirectTo('/')
         }
         else {

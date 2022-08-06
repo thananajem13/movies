@@ -5,7 +5,14 @@ import { usrToken } from '../ContextContent/ContextContent';
 import $ from 'jquery';
 import './Home.css'
 export default function Home() {
+    let  setID=(id)=>{
+        setUserId(id)
+    }
+    console.log(usrToken)
+    console.log(useContext(usrToken))
     const { userId, token, setUserId } = useContext(usrToken);
+    // setID(userId)
+    console.log(userId)
     const [notesData, setNotesData] = useState([])
     const [err, setErr] = useState([])
     const [note, setNote] = useState({
@@ -20,11 +27,13 @@ const [recive, setrecive] = useState(true)
     useEffect(() => {
         //   alert('hhhhhhhhhh')
         getNotes()
+        console.log(notesData)
+        // alert(notesData)
     }, [])
 
     async function submitUpdateForm(id) {
         console.log(id)
-        let nottee = notesData.filter((note) => { return note._id === id })
+        let nottee = notesData.filter((notee) => { return notee._id === id })
         console.log(nottee)
         let { title, desc } = nottee[0]
         console.log(nottee[0], title, desc)
@@ -89,9 +98,7 @@ const [recive, setrecive] = useState(true)
         */
     }
     let setRecive =(isRecived)=>{  setrecive(isRecived) }
-    let  setID=(id)=>{
-        setUserId(id)
-    }
+    
 //    function setRecive (isRecived){
 //         setrecive(isRecived)
 //     }
@@ -104,7 +111,9 @@ const [recive, setrecive] = useState(true)
         // console.log(token)
          setID(localStorage.getItem("userID") )
         // console.log(userId)
-        // console.log(localStorage.getItem("userID"))
+        console.log(localStorage.getItem("userID"))
+        console.log(token)
+        console.log(userId)
         // setRecive(false) 
         if (token !== null && userId !== "") {
             
@@ -137,10 +146,15 @@ const [recive, setrecive] = useState(true)
         // alert('notes sets')
     }
     async function addNote() {
-        let usrID = userId;
+        let usrID =  userId;
         let usrTokens = token;
-        console.log({ ...note, "userID": usrID, "token": usrTokens })
+        // let usrID = userId;
+        // let usrTokens = token;
+        console.log({ ...note  })
+        console.log({  "userID": usrID  })
+        console.log({  "token": usrTokens })
         setRecive(false)
+        let ID =  usrID
         let { data } = await axios.post('https://route-egypt-api.herokuapp.com/addNote', { ...note, "userID": usrID, "token": usrTokens })
         setRecive(true)
         if (data.message === "success") {
@@ -244,18 +258,23 @@ const [recive, setrecive] = useState(true)
                                         return er.message
                                     }) : ""}</p>
                                     {/* editedNoteID */}
-                                    {console.log(notesData.filter((note) => { return note._id === editedNoteID }))
+                                    { 
+                                    console.log(
+                                        ...notesData.filter((notee) => { 
+                                        console.log(notee) 
+                                        return notee._id === editedNoteID })
+                                        )
                                     }
                                     <div className="mb-3">
                                         <input className='form-control' onChange={(e) => { saveProps(e) }} type="text" placeholder="Type your note's title" value={
-                                            notesData.filter((note) => { return note._id === editedNoteID }).length !== 0 ?
-                                                (notesData.filter((note) => { return note._id === editedNoteID }))[0].title : ""
+                                            notesData.filter((notee) => { return notee._id === editedNoteID }).length !== 0 ?
+                                                (notesData.filter((notee) => { return notee._id === editedNoteID }))[0].title : ""
                                         } name="title" />
                                     </div>
                                     <div className="mb-3">
                                         <textarea className='form-control' onChange={(e) => { saveProps(e) }} cols="30" rows="10" placeholder='Type your note' name="desc" value={
-                                            notesData.filter((note) => { return note._id === editedNoteID }).length !== 0 ?
-                                                (notesData.filter((note) => { return note._id === editedNoteID }))[0].desc : ""
+                                            notesData.filter((notee) => { return notee._id === editedNoteID }).length !== 0 ?
+                                                (notesData.filter((notee) => { return notee._id === editedNoteID }))[0].desc : ""
                                         }></textarea>
                                     </div>
                                 </div>

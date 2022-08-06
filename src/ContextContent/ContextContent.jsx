@@ -16,9 +16,11 @@ export default function ContextContent(props) {
             // console.log(token)
             // console.log(jwtDecode(token))
             // setUserId(jwtDecode(token)._id) 
-           setId(jwtDecode(token))  
+           setId(jwtDecode(token)._id)  
             localStorage.setItem("userID",jwtDecode(token)._id)
-            // console.log(localStorage.getItem("userID"))
+            console.log(jwtDecode(token))
+            console.log(jwtDecode(token)._id)
+            console.log(localStorage.getItem("userID"))
             // console.log(userId)
         }
         else { setId("")  }
