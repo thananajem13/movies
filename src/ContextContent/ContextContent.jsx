@@ -30,6 +30,7 @@ export default function ContextContent(props) {
     function setId(id) {
         setUserId(id)
     }
+    console.log(localStorage.getItem("userID"))
     return (
 
         <usrToken.Provider value={ {token, setToken, userId,setUserId }}>

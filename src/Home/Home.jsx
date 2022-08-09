@@ -1,11 +1,21 @@
 import axios from 'axios';
 import Joi from 'joi';
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { usrToken } from '../ContextContent/ContextContent';
 import $ from 'jquery';
 import './Home.css'
 export default function Home() {
-    let  setID=(id)=>{
+    // setUserId(localStorage.getItem("userID") )
+    const [userIDS, setUserIDS] = useState(localStorage.getItem("userID"))
+    // function saveProps(e) {
+    //     note[e.currentTarget.name] = e.currentTarget.value;
+    //     console.log(note)
+    // }
+    const saveProps = useCallback((e) => {
+        note[e.currentTarget.name] = e.currentTarget.value;
+        console.log(note); console.log('Clicked!');
+    }, []);
+    let setID = (id) => {
         setUserId(id)
     }
     console.log(usrToken)
@@ -19,7 +29,7 @@ export default function Home() {
         title: "",
         desc: ""
     })
-const [recive, setrecive] = useState(true)
+    const [recive, setrecive] = useState(true)
     const [editedNoteID, setEditedNoteID] = useState("")
     const [deleteNoteID, setDeleteNoteID] = useState("")
     // getNotes()
@@ -41,16 +51,14 @@ const [recive, setrecive] = useState(true)
         let res = await axios.put('https://route-egypt-api.herokuapp.com/updateNote', { "title": title, "desc": desc, "NoteID": id, "token": token, "userID": userId })
         setRecive(true)
         console.log(res)
-        $("#exampleModal3").removeClass('fade');
-        $("#exampleModal3").removeClass('show');
-        $("#exampleModal3").attr('aria-hidden', "true");
-        $("#exampleModal3").removeAttr('role');
-        $("#exampleModal3").removeAttr('aria-modal');
-        //$('body').removeAttr('style')
-        $('body').removeClass('modal-open')
-        $("#exampleModal3").remove();
-        // $('#exampleModal3').modal('hide');
-
+        $('.navbar').css('z-index', '9999')
+        $('.container').css({ 'z-index': '9998', 'position': 'relative' })
+        if ($('.modal-backdrop').length !== 0) {
+            $('.modal-backdrop').remove()
+        }
+        $('body').css('overflow','auto')
+        $('#exampleModal3').css('display', "none");
+       
         $('#title').val('')
         $('#desc').val('')
         if (res.data.message === "updated") {
@@ -76,18 +84,19 @@ const [recive, setrecive] = useState(true)
         if (res.data.message === "deleted") {
             alert("data deleted successfully!!")
             getNotes()
-            $("#exampleModal3").removeClass('fade'); $("#exampleModal3").removeClass('show');
-            $("#exampleModal2").attr('aria-hidden', "true");
-            $("#exampleModal2").removeAttr('role');
-            $("#exampleModal2").removeAttr('aria-modal');
-            //$('body').removeAttr('style')
-            $('body').removeClass('modal-open')
-            $("#exampleModal2").remove();
-            // $('#exampleModal3').modal('hide');
+            $('.navbar').css('z-index', '9999')
+            $('.container').css({ 'z-index': '9998', 'position': 'relative' })
+            if ($('.modal-backdrop').length !== 0) {
+                $('.modal-backdrop').remove()
+            }
+            $('body').css('overflow','auto')
+            $('#exampleModal2').css('display', "none");
+           
+             
 
             $('#title').val('')
             $('#desc').val('')
-
+getNotes()
         }
         else { }
         //alert(res) 
@@ -97,29 +106,35 @@ const [recive, setrecive] = useState(true)
         "NoteID":"5edd7a356573a6001774adb8", "token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpX"
         */
     }
-    let setRecive =(isRecived)=>{  setrecive(isRecived) }
-    
-//    function setRecive (isRecived){
-//         setrecive(isRecived)
-//     }
-//     function setID(id){
-//         setUserId(id)
-//     }
+    let setRecive = (isRecived) => { setrecive(isRecived) }
+
+    //    function setRecive (isRecived){
+    //         setrecive(isRecived)
+    //     }
+    //     function setID(id){
+    //         setUserId(id)
+    //     }
     async function getNotes() {
         // alert('get notes here')
         // console.log(userId)
         // console.log(token)
-         setID(localStorage.getItem("userID") )
+        // setUserId(localStorage.getItem("userID") )
+        //  setID(localStorage.getItem("userID") )
         // console.log(userId)
         console.log(localStorage.getItem("userID"))
         console.log(token)
         console.log(userId)
+        console.log(userId)
+        console.log(userIDS)
+        console.log(typeof (userIDS))
+        console.log(token)
+        console.log(typeof (token))
         // setRecive(false) 
-        if (token !== null && userId !== "") {
-            
+        if (token.length !== 0 && userIDS.length !== 0) {
+            console.log(userIDS)
             let { data } = await axios.get('https://route-egypt-api.herokuapp.com/getUserNotes', {
                 headers: {
-                    'userID': userId,
+                    'userID': userIDS,
                     'Token': token,
                 }
             });
@@ -131,14 +146,15 @@ const [recive, setrecive] = useState(true)
                 setNoNotee(data.message)
             }
             else {//data.message === "success"
-                setNote_(data.Notes)
+                setNotesData(data.Notes)
+                // setNote_(data.Notes)
                 console.log(data.Notes)
 
             }
         }
 
     }
-    function setNoNotee(noNotee){
+    function setNoNotee(noNotee) {
         setNoNotes(noNotee)
     }
     function setNote_(newArrNotes) {
@@ -146,30 +162,30 @@ const [recive, setrecive] = useState(true)
         // alert('notes sets')
     }
     async function addNote() {
-        let usrID =  userId;
+        let usrID = userId;
         let usrTokens = token;
         // let usrID = userId;
         // let usrTokens = token;
-        console.log({ ...note  })
-        console.log({  "userID": usrID  })
-        console.log({  "token": usrTokens })
+        console.log({ ...note })
+        console.log({ "userID": usrID })
+        console.log({ "token": usrTokens })
         setRecive(false)
-        let ID =  usrID
+        let ID = usrID
         let { data } = await axios.post('https://route-egypt-api.herokuapp.com/addNote', { ...note, "userID": usrID, "token": usrTokens })
         setRecive(true)
         if (data.message === "success") {
             let newArrNotes = [...notesData]
             newArrNotes.push(note)
             setNote_(newArrNotes)
-            //$("#exampleModal").modal("hide");
-            $("#exampleModal").remove();
-            $("#exampleModal").removeClass('show');
-            $("#exampleModal").attr('aria-hidden', "true");
-            $("#exampleModal").removeAttr('role');
-            $("#exampleModal").removeAttr('aria-modal');
-            //$('body').removeAttr('style')
-            $('body').removeClass('modal-open')
 
+            $('.navbar').css('z-index', '9999')
+            $('.container').css({ 'z-index': '9998', 'position': 'relative' })
+            if ($('.modal-backdrop').length !== 0) {
+                $('.modal-backdrop').remove()
+            }
+            $('body').css('overflow','auto')
+            $('#exampleModal').css('display', "none");
+           
             $('#title').val('')
             $('#desc').val('')
             alert("data added successfully!!")
@@ -177,6 +193,12 @@ const [recive, setrecive] = useState(true)
         }
         else { }
     }
+    // $('*[data-bs-toggle="modal"]').click(()=>{
+    //     $('.modal') && $('.modal input').attr('readonly',false)
+    //     console.log( $('.modal input').attr('readonly' ))
+    //     alert('clicked')
+    // })
+    // $('*[data-customerID="22"]');
     function submitForm(e) {
         e.preventDefault()
         validateData()
@@ -205,10 +227,9 @@ const [recive, setrecive] = useState(true)
         }
         console.log(res)
     }
-    function saveProps(e) {
-        note[e.currentTarget.name] = e.currentTarget.value;
-        console.log(note)
-    }
+    console.log(notesData)
+    console.log(localStorage.getItem("userID"))
+    //    setUserId(localStorage.getItem("userID"))
     return (
         <>
             <div className="container">
@@ -227,8 +248,8 @@ const [recive, setrecive] = useState(true)
                             </div>
                             <form onSubmit={(e) => { submitForm(e) }}>
                                 <div className="modal-body">
-                                    <p className='alert alert-danger d-none' id='noteErr'>{(err.length !== 0) ? err.map((er) => {
-                                        return er.message
+                                    <p className='alert alert-danger d-none' id='noteErr'>{(err.length !== 0) ? err.map((er, i) => {
+                                        return <span key={i}>{er.message}</span>
                                     }) : ""}</p>
                                     <div className="mb-3">
                                         <input className='form-control' onChange={(e) => { saveProps(e) }} type="text" placeholder="Type your note's title" name="title" id='title' />
@@ -254,15 +275,16 @@ const [recive, setrecive] = useState(true)
                             </div>
                             <form onSubmit={(e) => { e.preventDefault() }}>
                                 <div className="modal-body">
-                                    <p className='alert alert-danger d-none' id='noteErr'>{(err.length !== 0) ? err.map((er) => {
-                                        return er.message
+                                    <p className='alert alert-danger d-none' id='noteErr'>{(err.length !== 0) ? err.map((er, i) => {
+                                        return <span key={i}>{er.message}</span>
                                     }) : ""}</p>
                                     {/* editedNoteID */}
-                                    { 
-                                    console.log(
-                                        ...notesData.filter((notee) => { 
-                                        console.log(notee) 
-                                        return notee._id === editedNoteID })
+                                    {
+                                        console.log(
+                                            ...notesData.filter((notee) => {
+                                                console.log(notee)
+                                                return notee._id === editedNoteID
+                                            })
                                         )
                                     }
                                     <div className="mb-3">
@@ -274,7 +296,10 @@ const [recive, setrecive] = useState(true)
                                     <div className="mb-3">
                                         <textarea className='form-control' onChange={(e) => { saveProps(e) }} cols="30" rows="10" placeholder='Type your note' name="desc" value={
                                             notesData.filter((notee) => { return notee._id === editedNoteID }).length !== 0 ?
-                                                (notesData.filter((notee) => { return notee._id === editedNoteID }))[0].desc : ""
+                                                (notesData.filter((notee) => {
+                                                    console.log(notee)
+                                                    return notee._id === editedNoteID
+                                                }))[0].desc : ""
                                         }></textarea>
                                     </div>
                                 </div>
@@ -308,9 +333,11 @@ const [recive, setrecive] = useState(true)
                 </div>
 
                 <div className="row mt-2">
-                    { 
-                        (notesData.length !== 0) ? (notesData.map((note) => {
-                            return (<div className="col-md-3 mb-2 " key={note._id}>
+                    {
+                        //    notesData && notesData.map((noteee)=>{return <h1>{noteee?.title}</h1>}) 
+                        (notesData.length !== 0) ? (notesData.map((notee) => {
+                            return (<div className="col-md-3 mb-2 " key={notee._id}>
+                                {console.log(notee)}
                                 <div className="box shadow bg-info p-2 position-relative">
 
                                     {/*  */}
@@ -321,8 +348,16 @@ const [recive, setrecive] = useState(true)
                                         </button>
 
                                         <ul className="dropdown-menu">
-                                            <li><a className="dropdown-item d-flex justify-content-between" href="#" onClick={() => { takeNoteID(note._id) }} data-bs-toggle="modal" data-bs-target="#exampleModal3"><span>Edit</span><i className="fa-solid fa-pen-to-square"></i></a></li>
-                                            <li><a className="dropdown-item d-flex justify-content-between " data-bs-toggle="modal" data-bs-target="#exampleModal2" onClick={() => { deletedNoteID(note._id) }} href="#"><span>Delete</span><i className="fa-solid fa-trash"></i></a></li>
+                                            <span className='bg-danger'>{notee.title}</span>
+                                            <li><a className="dropdown-item d-flex justify-content-between" href="#" onClick={() => {
+                                                alert(notee)
+                                                console.log(notee)
+                                                takeNoteID(notee._id)
+                                            }} data-bs-toggle="modal" data-bs-target="#exampleModal3"><span>Edit</span><i className="fa-solid fa-pen-to-square"></i></a></li>
+                                            <li><a className="dropdown-item d-flex justify-content-between " data-bs-toggle="modal" data-bs-target="#exampleModal2" onClick={() => {
+                                                console.log(notee._id);
+                                                deletedNoteID(notee._id)
+                                            }} href="#"><span>Delete</span><i className="fa-solid fa-trash"></i></a></li>
                                         </ul>
                                     </div>
                                     {/*  */}
@@ -336,8 +371,8 @@ const [recive, setrecive] = useState(true)
                                     </div> */}
 
                                     {/* <div className="note-title">{note._id}</div> */}
-                                    <div className="note-title mb-3 fw-bold">{note.title}</div>
-                                    <div className="note-desc">{note.desc}</div>
+                                    <div className="note-title mb-3 fw-bold">{notee.title}</div>
+                                    <div className="note-desc">{notee.desc}</div>
                                 </div>
                             </div>)
                         })) : <div className='alert alert-info m-auto w-50 text-center'>{noNotes}</div>
