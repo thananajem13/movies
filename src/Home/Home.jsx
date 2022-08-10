@@ -56,9 +56,9 @@ export default function Home() {
         if ($('.modal-backdrop').length !== 0) {
             $('.modal-backdrop').remove()
         }
-        $('body').css('overflow','auto')
+        $('body').css('overflow', 'auto')
         $('#exampleModal3').css('display', "none");
-       
+
         $('#title').val('')
         $('#desc').val('')
         if (res.data.message === "updated") {
@@ -89,14 +89,14 @@ export default function Home() {
             if ($('.modal-backdrop').length !== 0) {
                 $('.modal-backdrop').remove()
             }
-            $('body').css('overflow','auto')
+            $('body').css('overflow', 'auto')
             $('#exampleModal2').css('display', "none");
-           
-             
+
+
 
             $('#title').val('')
             $('#desc').val('')
-getNotes()
+            getNotes()
         }
         else { }
         //alert(res) 
@@ -183,9 +183,9 @@ getNotes()
             if ($('.modal-backdrop').length !== 0) {
                 $('.modal-backdrop').remove()
             }
-            $('body').css('overflow','auto')
+            $('body').css('overflow', 'auto')
             $('#exampleModal').css('display', "none");
-           
+
             $('#title').val('')
             $('#desc').val('')
             alert("data added successfully!!")
@@ -230,6 +230,13 @@ getNotes()
     console.log(notesData)
     console.log(localStorage.getItem("userID"))
     //    setUserId(localStorage.getItem("userID"))
+    // $('#exampleModal3').on('shown.bs.modal', function (e) {
+    //     $(document).off('focusin.modal');
+    // })
+    let x =  $('#exampleModal3').on('shown.bs.modal', function (e) {
+        $(document).off('focusin.modal');
+    })[0]
+    console.log(  x )
     return (
         <>
             <div className="container">
@@ -266,6 +273,7 @@ getNotes()
                         </div>
                     </div>
                 </div>
+                
                 <div className="modal fade" id="exampleModal3" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div className="modal-dialog">
                         <div className="modal-content">
@@ -288,13 +296,13 @@ getNotes()
                                         )
                                     }
                                     <div className="mb-3">
-                                        <input className='form-control' onChange={(e) => { saveProps(e) }} type="text" placeholder="Type your note's title" value={
+                                        <input  className='form-control' onChange={(e) => { saveProps(e) }} type="text" placeholder="Type your note's title" value={
                                             notesData.filter((notee) => { return notee._id === editedNoteID }).length !== 0 ?
                                                 (notesData.filter((notee) => { return notee._id === editedNoteID }))[0].title : ""
                                         } name="title" />
                                     </div>
                                     <div className="mb-3">
-                                        <textarea className='form-control' onChange={(e) => { saveProps(e) }} cols="30" rows="10" placeholder='Type your note' name="desc" value={
+                                        <textarea  className='form-control' onChange={(e) => { saveProps(e) }} cols="30" rows="10" placeholder='Type your note' name="desc" value={
                                             notesData.filter((notee) => { return notee._id === editedNoteID }).length !== 0 ?
                                                 (notesData.filter((notee) => {
                                                     console.log(notee)
@@ -348,9 +356,9 @@ getNotes()
                                         </button>
 
                                         <ul className="dropdown-menu">
-                                            <span className='bg-danger'>{notee.title}</span>
+                                            {/* <span className='bg-danger'>{notee.title}</span> */}
                                             <li><a className="dropdown-item d-flex justify-content-between" href="#" onClick={() => {
-                                                alert(notee)
+                                                //alert(notee)
                                                 console.log(notee)
                                                 takeNoteID(notee._id)
                                             }} data-bs-toggle="modal" data-bs-target="#exampleModal3"><span>Edit</span><i className="fa-solid fa-pen-to-square"></i></a></li>
