@@ -233,10 +233,7 @@ export default function Home() {
     // $('#exampleModal3').on('shown.bs.modal', function (e) {
     //     $(document).off('focusin.modal');
     // })
-    let x =  $('#exampleModal3').on('shown.bs.modal', function (e) {
-        $(document).off('focusin.modal');
-    })[0]
-    console.log(  x )
+  
     return (
         <>
             <div className="container">
