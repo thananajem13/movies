@@ -19,3 +19,6 @@
 .modal-backdrop.show{
     opacity: .5 !important;
 }
+#noteErr{
+    /* display: none; */
+}
