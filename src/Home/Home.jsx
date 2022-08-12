@@ -5,99 +5,108 @@ import { usrToken } from "../ContextContent/ContextContent";
 import $ from "jquery";
 import "./Home.css";
 export default function Home() {
-
-  // setUserId(localStorage.getItem("userID") )
-  const [userIDS, setUserIDS] = useState(localStorage.getItem("userID"));
-  function saveProps(e) {
-    note[e.currentTarget.name] = e.currentTarget.value;
-    console.log(note);
-  }
-  const saveTitle = useCallback((e) => {
-    // note[e.currentTarget.name] = e.currentTarget.value;
-    setNoteTitle(e.target.value);
-    console.log("your note", note);
-    console.log("Clicked!");
-  }, []);
-
-  const saveDesc = useCallback((e) => {
-    // note[e.currentTarget.name] = e.currentTarget.value;
-    setNoteDesc(e.target.value);
-    console.log("your note", note);
-    console.log("Clicked!");
-  }, []);
-
-  let setID = (id) => {
-    setUserId(id);
-  };
-  console.log(usrToken);
-  console.log(useContext(usrToken));
-  const { userId, token, setUserId } = useContext(usrToken);
-  // setID(userId)
-  console.log(userId);
-  const [notesData, setNotesData] = useState([]);
-  const [err, setErr] = useState([]);
   const [note, setNote] = useState({
     title: "",
     desc: "",
   });
 
-  const [title, setNoteTitle] = useState("");
-  const [desc, setNoteDesc] = useState("");
+  // setUserId(localStorage.getItem("userID") )
+  const [userIDS, setUserIDS] = useState(localStorage.getItem("userID"));
+  //console.log(usrToken);
+  //console.log(useContext(usrToken));
+  const { userId, token, setUserId } = useContext(usrToken);
+  // setID(userId)
+  //console.log(userId);
+  const [notesData, setNotesData] = useState([]);
+  const [err, setErr] = useState([]);
+ 
+
+  // const [title, setNoteTitle] = useState("");
+  // const [desc, setNoteDesc] = useState("");
   const [recive, setrecive] = useState(true);
   const [editedNoteID, setEditedNoteID] = useState("");
   const [deleteNoteID, setDeleteNoteID] = useState("");
+  
+  function saveProps(e) {
+   // console.log(e.currentTarget.value)
+    note[e.currentTarget.name] = e.currentTarget.value;
+    setNote(note)
+   // console.log(note);
+  }
+  // const saveTitle = useCallback((e) => {
+  //   // note[e.currentTarget.name] = e.currentTarget.value;
+  //   validateData()
+  //   setNoteTitle(e.target.value);
+  //   validateData()
+  //   // console.log("your note", note);
+  //   // console.log("Clicked!");
+  // }, []);
+
+  // const saveDesc = useCallback((e) => {
+  //   // note[e.currentTarget.name] = e.currentTarget.value;
+  //   validateData()
+  //   setNoteDesc(e.target.value);
+  //   validateData()
+  //   // console.log("your note", note);
+  //   // console.log("Clicked!");
+  // }, []);
+
+  let setID = (id) => {
+    setUserId(id);
+  };
   // getNotes()
   const [noNotes, setNoNotes] = useState("");
   useEffect(() => {
     //   alert('hhhhhhhhhh')
     getNotes();
-    console.log(notesData);
+    // console.log(notesData);
     // alert(notesData)
   }, []);
 
   async function submitUpdateForm(id) {
-    console.log(id);
+    // console.log(id);
     let nottee = notesData.filter((notee) => {
       return notee._id === id;
     });
-    console.log(nottee);
+    // console.log(nottee);
     // let { title, desc } = note;
     // let { title, desc } = nottee[0];
-    console.log("myNoteesssssssssss", title, desc);
-    console.log("myNotee", nottee[0], title, desc);
-    console.log(validateData())
-if(validateData()){
-    alert('validated')
-    setRecive(false);
-    let res = await axios.put(
-      "https://route-egypt-api.herokuapp.com/updateNote",
-      { title: title, desc: desc, NoteID: id, token: token, userID: userId }
-    );
-    setRecive(true);
-    console.log(res);
-    $(".navbar").css("z-index", "9999");
-    $(".container").css({ "z-index": "9998", position: "relative" });
-    if ($(".modal-backdrop").length !== 0) {
-      $(".modal-backdrop").remove();
-    }
-    $("body").css("overflow", "auto");
-    $("#exampleModal3").css("display", "none");
+    // console.log("myNoteesssssssssss", title, desc);
+    // console.log("myNotee", nottee[0], title, desc);
+    // console.log(validateData())
+    // console.log("title: ",title,"desc: ", desc)
+    if (validateData(note)) {
+      // alert('validated')
+      setRecive(false);
+      let res = await axios.put(
+        "https://route-egypt-api.herokuapp.com/updateNote",
+        { ...note, NoteID: id, token: token, userID: userId }
+      );
+      setRecive(true);
+      // console.log(res);
+      $(".navbar").css("z-index", "9999");
+      $(".container").css({ "z-index": "9998", position: "relative" });
+      if ($(".modal-backdrop").length !== 0) {
+        $(".modal-backdrop").remove();
+      }
+      $("body").css("overflow", "auto");
+      $("#exampleModal3").css("display", "none");
 
-    $("#title").val("");
-    $("#desc").val("");
-    if (res.data.message === "updated") {
-      alert("data updated successfully!!");
-      getNotes();
+      $("#title").val("");
+      $("#desc").val("");
+      if (res.data.message === "updated") {
+        alert("data updated successfully!!");
+        getNotes();
+      }
+      // alert('  validate', err)
     }
-    alert('  validate',err)
-}
-else{
-alert('not validate',err)
-}
+    else {
+      // alert('not validate', err)
     }
+  }
   async function deleteNote(id) {
-    console.log(`id: ${id}`);
-    console.log(`token: ${token}`);
+    // console.log(`id: ${id}`);
+    // console.log(`token: ${token}`);
     setRecive(false);
     let res = await axios.delete(
       "https://route-egypt-api.herokuapp.com/deleteNote",
@@ -109,9 +118,9 @@ alert('not validate',err)
       }
     );
     setRecive(true);
-    console.log(res);
-    console.log(res.data.message);
-    console.log({ NoteID: id, token: token });
+    // console.log(res);
+    // console.log(res.data.message);
+    // console.log({ NoteID: id, token: token });
     if (res.data.message === "deleted") {
       alert("data deleted successfully!!");
       getNotes();
@@ -151,17 +160,17 @@ alert('not validate',err)
     // setUserId(localStorage.getItem("userID") )
     //  setID(localStorage.getItem("userID") )
     // console.log(userId)
-    console.log(localStorage.getItem("userID"));
-    console.log(token);
-    console.log(userId);
-    console.log(userId);
-    console.log(userIDS);
-    console.log(typeof userIDS);
-    console.log(token);
-    console.log(typeof token);
+    // console.log(localStorage.getItem("userID"));
+    // console.log(token);
+    // console.log(userId);
+    // console.log(userId);
+    // console.log(userIDS);
+    // console.log(typeof userIDS);
+    // console.log(token);
+    // console.log(typeof token);
     // setRecive(false)
     if (token.length !== 0 && userIDS.length !== 0) {
-      console.log(userIDS);
+      // console.log(userIDS);
       let { data } = await axios.get(
         "https://route-egypt-api.herokuapp.com/getUserNotes",
         {
@@ -173,15 +182,15 @@ alert('not validate',err)
       );
       // setRecive(true)
       // console.log(data)
-      console.log(data.Notes);
-      console.log(data.message); // no data found or data
+      // console.log(data.Notes);
+      // console.log(data.message); // no data found or data
       if (data.message === "no notes found") {
         setNoNotee(data.message);
       } else {
         //data.message === "success"
         setNotesData(data.Notes);
         // setNote_(data.Notes)
-        console.log(data.Notes);
+        // console.log(data.Notes);
       }
     }
   }
@@ -197,11 +206,12 @@ alert('not validate',err)
     let usrTokens = token;
     // let usrID = userId;
     // let usrTokens = token;
-    console.log({ ...note });
-    console.log({ userID: usrID });
-    console.log({ token: usrTokens });
+    // console.log({ ...note });
+    // console.log({ userID: usrID });
+    // console.log({ token: usrTokens });
     setRecive(false);
     let ID = usrID;
+    // console.log(note)
     let { data } = await axios.post(
       "https://route-egypt-api.herokuapp.com/addNote",
       { ...note, userID: usrID, token: usrTokens }
@@ -235,8 +245,9 @@ alert('not validate',err)
   // $('*[data-customerID="22"]');
   function submitForm(e) {
     e.preventDefault();
-    if(validateData()){
-        addNote();
+    // console.log(note)
+    if (validateData(note)) {
+      addNote();
     }
     // validateData();
   }
@@ -246,44 +257,45 @@ alert('not validate',err)
   function takeNoteID(id) {
     setEditedNoteID(id);
   }
-  function validateData() {
+  function validateData(noteee) {
     let schema = Joi.object({
       title: Joi.string().required(),
       desc: Joi.string().required(),
     });
-    let res = schema.validate(note, { abortEarly: false });
+    // let res = schema.validate(note, { abortEarly: false });
+    let res = schema.validate(noteee, { abortEarly: false });
     if (res.error !== undefined) {
       setErr(res.error.details);
-      console.log(res.error.details)
-      alert($("#noteErr").hasClass('d-none'))
-      if($("#noteErr").hasClass('d-none')){
-           
-          $("#noteErr").removeClass("d-none");
+      console.log("errorrrrrrs",res.error.details)
+      // alert($("#noteErr").hasClass('d-none'))
+      if ($("#noteErr").hasClass('d-none')) {
+
+        $("#noteErr").removeClass("d-none");
       }
       return false
     } else {
       setErr([]);
 
-      alert($("#noteErr").hasClass('d-none'))
-      if(!$("#noteErr").hasClass('d-none')){
-        alert($("#noteErr").hasClass('d-none'))
-          
-          $("#noteErr").addClass("d-none");
-      }
+      // alert($("#noteErr").hasClass('d-none'))
+      if (!$("#noteErr").hasClass('d-none')) {
+        // alert($("#noteErr").hasClass('d-none'))
 
+        $("#noteErr").addClass("d-none");
+      }
+// console.log(res.value)
       setNote(res.value);
-    //   addNote();
+      //   addNote();
       return true
     }
-    console.log(res);
+    // console.log(res);
   }
-  console.log(notesData);
-  console.log(localStorage.getItem("userID"));
+  // console.log(notesData);
+  // console.log(localStorage.getItem("userID"));
   //    setUserId(localStorage.getItem("userID"))
   // $('#exampleModal3').on('shown.bs.modal', function (e) {
   //     $(document).off('focusin.modal');
   // })
-console.log('err: ',err)
+  console.log('err: ', err)
   return (
     <>
       <div className="container">
@@ -322,14 +334,16 @@ console.log('err: ',err)
                 }}
               >
                 <div className="modal-body">
-                  <p className="alert alert-danger d-none" id="noteErr">
 
-                    {err.length !== 0
-                      ? err.map((er, i) => {
-                          return <span className="d-block" key={i}>{er.message}</span>;
+
+                  {err.length !== 0
+                    ? err.map((er, i) => {
+                      return <p className="alert alert-danger" id="noteErr">
+                        <span className="d-block" key={i}>{er.message}</span>
+                        </p>;
                         })
                       : ""}
-                  </p>
+                   
                   <div className="mb-3">
                     <input
                       className="form-control"
@@ -401,60 +415,53 @@ console.log('err: ',err)
                 }}
               >
                 <div className="modal-body">
-                  <p className="alert alert-danger" id="noteErr">
-                    {err.length !== 0
-                      ? err.map((er, i) => {
-                          return <span key={i}>{er.message}</span>;
-                        })
-                      : ""}
-                  </p>
-                  {/* editedNoteID */}
-                  {console.log(
-                    ...notesData.filter((notee) => {
-                      console.log(notee);
-                      return notee._id === editedNoteID;
+                  {err.length !== 0
+                    ? err.map((er, i) => {
+                      return <p className="alert alert-danger" id="noteErr">
+                        <span key={i}>{er.message}</span>;
+                      </p>
                     })
-                  )}
+                    : ""}
+
+                  {/* editedNoteID */}
+                   
                   <div className="mb-3">
                     <input
                       className="form-control"
                       onChange={(e) => {
-                        saveTitle(e);
+                        saveProps(e);
                       }}
                       type="text"
                       placeholder="Type your note's title"
-                    //   value={
-                    //     notesData.filter((notee) => {
-                    //       return notee._id === editedNoteID;
-                    //     }).length !== 0
-                    //       ? notesData.filter((notee) => {
-                    //           return notee._id === editedNoteID;
-                    //         })[0].title
-                    //       : ""
-                    //   }
+                      //   value={
+                      //     notesData.filter((notee) => {
+                      //       return notee._id === editedNoteID;
+                      //     }).length !== 0
+                      //       ? notesData.filter((notee) => {
+                      //           return notee._id === editedNoteID;
+                      //         })[0].title
+                      //       : ""
+                      //   }
                       defaultValue={
                         notesData.filter((notee) => {
+                          return notee._id === editedNoteID;
+                        }).length !== 0
+                          ? notesData.filter((notee) => {
+                            // console.log(notee);
                             return notee._id === editedNoteID;
-                          }).length !== 0
-                            ? notesData.filter((notee) => {
-                                console.log(notee);
-                                return notee._id === editedNoteID;
-                              })[0].title
-                            : ""
+                          })[0].title
+                          : ""
                       }
                       // value={note.title}
                       name="title"
                     />
-                    {console.log(notesData,notesData.filter((notee) => {
-                                console.log(notee);
-                                return notee._id === editedNoteID;
-                              }),"  -   ",editedNoteID)}
+                   
                   </div>
                   <div className="mb-3">
                     <textarea
                       className="form-control"
                       onChange={(e) => {
-                        saveDesc(e);
+                        saveProps(e);
                       }}
                       cols="30"
                       rows="10"
@@ -465,9 +472,9 @@ console.log('err: ',err)
                           return notee._id === editedNoteID;
                         }).length !== 0
                           ? notesData.filter((notee) => {
-                              console.log(notee);
-                              return notee._id === editedNoteID;
-                            })[0].desc
+                            // console.log(notee);
+                            return notee._id === editedNoteID;
+                          })[0].desc
                           : ""
                       }
                     ></textarea>
@@ -553,7 +560,7 @@ console.log('err: ',err)
               notesData.map((notee) => {
                 return (
                   <div className="col-md-3 mb-2 " key={notee._id}>
-                    {console.log(notee)}
+                    
                     <div className="box shadow bg-info p-2 position-relative">
                       {/*  */}
                       <div className="btn-group position-absolute more">
@@ -579,7 +586,7 @@ console.log('err: ',err)
                               href="#"
                               onClick={() => {
                                 //alert(notee)
-                                console.log(notee);
+                                // console.log(notee);
                                 takeNoteID(notee._id);
                               }}
                               data-bs-toggle="modal"
@@ -595,7 +602,7 @@ console.log('err: ',err)
                               data-bs-toggle="modal"
                               data-bs-target="#exampleModal2"
                               onClick={() => {
-                                console.log(notee._id);
+                                // console.log(notee._id);
                                 deletedNoteID(notee._id);
                               }}
                               href="#"
